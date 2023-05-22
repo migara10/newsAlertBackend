@@ -1,5 +1,6 @@
 const express = require('express'); // import express
 const app = express();
+app.timeout = 20000;
 const path = require('path');
 const db = require('./db'); // import db.js
 const auth = require('./routes/auth') // import auth route
