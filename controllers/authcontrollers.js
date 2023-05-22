@@ -3,17 +3,17 @@ const authModel = require('../models/userModel') // import authModel
     findUser();
 } */
 
-authRegister =  async (req, res) => {
-    /* const query = { firstName: 'migara' }
-    const data = await authModel.find({}); */
-    res.send({category: 'migara123'});
-    
-}
-/* findUser =  async (req, res) => {
-    const data = await authModel.find({});
-    res.send({category: data});
-    
-} */
+const findUser = async (userData) => {
+  const data = await authModel.find({});
+  console.log(userData);
+  return data;
+};
+
+const authRegister = async (req, res) => {
+  const data = await findUser(req.body);
+  console.log(data); // Print the return value
+  res.send({ category: data });
+};
 
 module.exports = {
     authRegister
