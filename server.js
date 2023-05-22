@@ -1,8 +1,8 @@
 const express = require('express'); // import express
+const mongoose = require('mongoose'); // import mongoose
 const app = express();
-app.timeout = 20000;
 const path = require('path');
-const db = require('./db'); // import db.js
+// const db = require('./db'); // import db.js
 const auth = require('./routes/auth') // import auth route
 const bodyParser = require('body-parser') // import bodyParser
 // parse application/x-www-form-urlencoded
@@ -10,6 +10,13 @@ app.use(bodyParser.urlencoded({ extended: false }))
 
 // parse application/json
 app.use(bodyParser.json())
+
+const db = 'mongodb+srv://migara:game1994@unilog.z3swk.mongodb.net/derana?retryWrites=true&w=majority';
+
+mongoose.connect(db, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+});
 
 const authModel = require('./models/userModel') // import authModel
 
@@ -27,8 +34,9 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use('/auth', auth);
 
+
 // run server
 app.listen(port, () => {
     console.log(`server is running on: ${port}`)
-    connectDB();
+    // connectDB();
 })
