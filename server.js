@@ -26,7 +26,7 @@ const authModel = require('./models/userModel') // import authModel
 
 const port = process.env.PORT || 3000; // hosting port or local port
 app.get('/', async (req, res) => {
-    const data = await authModel.find({});
+    const data = await authModel.find({}).maxTimeMS(20000);
     res.send({ category: data });
     console.log('jjjj')
 });

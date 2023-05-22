@@ -4,7 +4,7 @@ const authModel = require('../models/userModel') // import authModel
 } */
 
 const findUser = async (userData) => {
-  const data = await authModel.find({}).maxTimeMS(30000);
+  const data = await authModel.find({}).maxTimeMS(20000);
   console.log(userData);
   return data;
 };
