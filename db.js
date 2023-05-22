@@ -22,11 +22,11 @@ module.exports = connectDB; */
 } */
 
 connectDB = async () => {
-    /* const db = 'mongodb+srv://migara:game1994@unilog.z3swk.mongodb.net/derana?retryWrites=true&w=majority';
-    mongoose.connect(db) */
+    const db = 'mongodb+srv://migara:game1994@unilog.z3swk.mongodb.net/derana?retryWrites=true&w=majority';
+    /* mongoose.connect(db) */
     try {
         mongoose.set('strictQuery', false)
-        mongoose.connect(process.env.DB_URI)
+        mongoose.connect(db)
         console.log('Mongo connected')
     } catch (error) {
         console.log(error)
