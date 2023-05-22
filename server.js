@@ -11,11 +11,14 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
 app.use(bodyParser.json())
 
+const authModel = require('./models/userModel') // import authModel
+
 
 
 const port = process.env.PORT || 3000; // hosting port or local port
-app.get('/', (req, res) => {
-    res.send({ category: 'migaraaaa' });
+app.get('/', async (req, res) => {
+    const data = await authModel.find({});
+    res.send({ category: data });
     console.log('jjjj')
 });
 
