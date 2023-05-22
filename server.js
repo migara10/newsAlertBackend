@@ -1,7 +1,9 @@
 const express = require('express'); // import express
+const cors = require('cors')
 const mongoose = require('mongoose'); // import mongoose
 const app = express();
 const path = require('path');
+app.use(cors())
 // const db = require('./db'); // import db.js
 const auth = require('./routes/auth') // import auth route
 const bodyParser = require('body-parser') // import bodyParser
