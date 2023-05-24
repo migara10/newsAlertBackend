@@ -26,5 +26,11 @@ const port = process.env.PORT || 3000; // hosting port or local port
 // run server
 app.listen(port, () => {
     console.log(`server is running on: ${port}`)
-    connectDB();
+    // connectDB();
+    const db = 'mongodb+srv://migara:game1994@unilog.z3swk.mongodb.net/derana?retryWrites=true&w=majority';
+
+    mongoose.connect(db, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+    });
 })

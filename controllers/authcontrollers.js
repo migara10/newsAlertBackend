@@ -20,7 +20,7 @@ const authRegister = async (req, res) => {
 const getAllData = async (req, res) => {
     try {
         const data = await authModel.find({})
-        res.send({ category: req.body });
+        res.send({ category: req.body,  category2: data});
     }
     catch (error) {
         console.error(error);
