@@ -30,6 +30,16 @@ app.get('/', async (req, res) => {
     res.send({ category: data });
     console.log('jjjj')
 });
+app.post('/', async (req, res) => {
+    try {
+        const query = {userName: req.body.userName}
+        const data = await authModel.find(query).maxTimeMS(20000);
+        res.send({ category: data });
+        console.log('123')
+    } catch (error) {
+        console.log(error)
+    }
+});
 
 app.use(express.static(path.join(__dirname, "public")));
 
