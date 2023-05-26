@@ -13,12 +13,12 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
 app.use(bodyParser.json())
 
-const db = 'mongodb+srv://migara:game1994@unilog.z3swk.mongodb.net/derana?retryWrites=true&w=majority';
+/* const db = 'mongodb+srv://migara:game1994@unilog.z3swk.mongodb.net/derana?retryWrites=true&w=majority';
 
 mongoose.connect(db, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-});
+}); */
 
 const authModel = require('./models/userModel') // import authModel
 
@@ -50,5 +50,5 @@ app.use('/auth', auth);
 // run server
 app.listen(port, () => {
     console.log(`server is running on: ${port}`)
-    // connectDB();
+    connectDB();
 })
