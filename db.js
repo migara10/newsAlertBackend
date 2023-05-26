@@ -21,16 +21,16 @@ module.exports = connectDB; */
     this.multiply = function(a,b) { return a*b };
 } */
 
-connectDB = async () => {
+const connectToDatabase = async () => {
     const db = 'mongodb+srv://migara:game1994@unilog.z3swk.mongodb.net/derana?retryWrites=true&w=majority';
-    mongoose.connect(db)
-   /*  try {
-        mongoose.set('strictQuery', false)
-        mongoose.connect(db)
-        console.log('Mongo connected')
-    } catch (error) {
-        console.log(error)
-        process.exit()
-    } */
+    try {
+        await mongoose.connect(db, {
+          useNewUrlParser: true,
+          useUnifiedTopology: true,
+        });
+        console.log('Connected to MongoDB');
+      } catch (error) {
+        console.error('Error connecting to MongoDB:', error);
+      }
 };
-module.exports = connectDB;
+module.exports = connectToDatabase;

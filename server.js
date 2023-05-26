@@ -4,7 +4,7 @@ const mongoose = require('mongoose'); // import mongoose
 const app = express();
 const path = require('path');
 app.use(cors())
-const db = require('./db'); // import db.js
+const connectToDatabase = require('./db');
 const auth = require('./routes/auth') // import auth route
 const bodyParser = require('body-parser') // import bodyParser
 // parse application/x-www-form-urlencoded
@@ -20,11 +20,14 @@ mongoose.connect(db, {
     useUnifiedTopology: true,
 });
  */
+connectToDatabase();
 const authModel = require('./models/userModel') // import authModel
 
 
 
 const port = process.env.PORT || 3000; // hosting port or local port
+
+
 app.get('/', async (req, res) => {
     const data = await authModel.find({}).maxTimeMS(20000);
     res.send({ category: data });
@@ -50,5 +53,4 @@ app.use('/auth', auth);
 // run server
 app.listen(port, () => {
     console.log(`server is running on: ${port}`)
-    connectDB();
 })
