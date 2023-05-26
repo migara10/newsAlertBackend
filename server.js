@@ -12,15 +12,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 
 // parse application/json
 app.use(bodyParser.json())
-
-/* const db = 'mongodb+srv://migara:game1994@unilog.z3swk.mongodb.net/derana?retryWrites=true&w=majority';
-
-mongoose.connect(db, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-});
- */
-connectToDatabase();
+connectToDatabase(); // connect to database
 const authModel = require('./models/userModel') // import authModel
 
 

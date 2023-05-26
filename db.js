@@ -1,4 +1,5 @@
 const mongoose = require('mongoose'); // import mongoose
+require('dotenv').config(); // config env
 
 // require('dotenv').config(); // config env
 // connect mongo db
@@ -22,9 +23,8 @@ module.exports = connectDB; */
 } */
 
 const connectToDatabase = async () => {
-    const db = 'mongodb+srv://migara:game1994@unilog.z3swk.mongodb.net/derana?retryWrites=true&w=majority';
     try {
-        await mongoose.connect(db, {
+        await mongoose.connect(process.env.DB_URI, {
           useNewUrlParser: true,
           useUnifiedTopology: true,
         });
