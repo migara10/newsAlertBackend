@@ -23,7 +23,7 @@ app.use(bodyParser.json());
 app.use('/auth', auth);
 app.get('/', async (req, res) => {
     try {
-        const data = await authModel.find({}).maxTimeMS(20000);
+        const data = await authModel.find({}).maxTimeMS(90000);
         res.send({ category: data });
         console.log('get')
     } catch (error) {
@@ -33,7 +33,7 @@ app.get('/', async (req, res) => {
 app.post('/', async (req, res) => {
     try {
         const query = { userName: req.body.userName };
-        const data = await authModel.find(query).maxTimeMS(20000);
+        const data = await authModel.find(query).maxTimeMS(90000);
         res.send({ category: data });
         console.log('post')
     } catch (error) {
