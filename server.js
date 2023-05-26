@@ -1,6 +1,7 @@
 const express = require('express'); // import express
 const cors = require('cors')
 const mongoose = require('mongoose'); // import mongoose
+const authModel = require('./models/userModel') // import authModel
 const app = express();
 const path = require('path');
 app.use(cors())
@@ -16,11 +17,29 @@ app.use(bodyParser.json());
 
 
 
-app.use(express.static(path.join(__dirname, "public")));
+// app.use(express.static(path.join(__dirname, "public")));
 
 
 app.use('/auth', auth);
-
+app.get('/', async (req, res) => {
+    try {
+        const data = await authModel.find({}).maxTimeMS(20000);
+        res.send({ category: data });
+        console.log('get')
+    } catch (error) {
+        console.log(error, 'err')
+    }
+});
+app.post('/', async (req, res) => {
+    try {
+        const query = { userName: req.body.userName };
+        const data = await authModel.find(query).maxTimeMS(20000);
+        res.send({ category: data });
+        console.log('post')
+    } catch (error) {
+        console.log(error, 'err')
+    }
+});
 const port = process.env.PORT || 3000; // hosting port or local port
 
 // run server
