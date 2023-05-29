@@ -23,7 +23,7 @@ const userSchema = new Schema({
     email: {
         type: String,
         required: [true, "Email is required"],
-        validate:[isEmail, "Email Not Valid"],
+        validate: [isEmail, "Email Not Valid"],
     },
     password: {
         type: String,
@@ -37,10 +37,16 @@ const userSchema = new Schema({
     },
     isDeleted: {
         type: Boolean,
-        default: false
+        default: false,
+        /* validate: {
+            validator: function (value) {
+                return typeof value === 'boolean';
+            },
+            message: 'Invalid isDeleted value. Expected a boolean.'
+        } */
     },
 })
 
 userSchema.plugin(AutoIncrement, { inc_field: '_id' });
-const User  = mongoose.model('userauths', userSchema) // save user in db
+const User = mongoose.model('userauths', userSchema) // save user in db
 module.exports = User

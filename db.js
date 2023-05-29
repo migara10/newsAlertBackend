@@ -25,12 +25,18 @@ module.exports = connectDB; */
 const connectToDatabase = async () => {
     try {
         await mongoose.connect(process.env.DB_URI, {
-          useNewUrlParser: true,
-          useUnifiedTopology: true,
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
         });
         console.log('Connected to MongoDB');
-      } catch (error) {
+    } catch (error) {
         console.error('Error connecting to MongoDB:', error);
-      }
+    }
 };
+/* const connectToDatabase = async () => {
+    const db = "mongodb+srv://migara:game1994@unilog.z3swk.mongodb.net/derana?retryWrites=true&w=majority";
+    mongoose.connect(db)
+    console.log('db connect')
+
+}; */
 module.exports = connectToDatabase;
