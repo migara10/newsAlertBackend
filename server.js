@@ -36,16 +36,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/auth', auth);
 
 connectToDatabase(); // connect to database
-
-/* const db = "mongodb+srv://migara:game1994@unilog.z3swk.mongodb.net/derana?retryWrites=true&w=majority";
-mongoose.connect(db, err => {
-    if (err) {
-        console.log(err)
-    } else {
-        console.log('connect mongodb')
-    }
-})
- */
 // run server
 
 app.listen(port, () => {

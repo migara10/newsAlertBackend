@@ -1,5 +1,5 @@
 const authModel = require('../models/userModel');
-const hashPassword = require('../middlewares/hashPassword');
+const hashPassword = require('../middleware/hashPassword');
 
 const handleErrors = (err) => {
   if (err.message.includes('userauths validation failed')) {
@@ -18,7 +18,7 @@ const findUser = async (userData) => {
 
 const createUser = async (userData) => {
   try {
-    userData.password = await hashPassword.encriptPassword(userData.password);
+    userData.password = await hashPassword.encryptPassword(userData.password);
     const savedUser = await authModel.create(userData);
     return savedUser;
   } catch (error) {
