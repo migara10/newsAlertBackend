@@ -10,11 +10,11 @@ const handleErrors = (err) => {
   };
 };
 
-const findUser = async (userData) => {
+/* const findUser = async (userData) => {
   const query = {userName: userData.userName};
   const data = await authModel.findOne(query);
   return data;
-};
+}; */
 
 const createUser = async (userData) => {
   try {
@@ -29,7 +29,7 @@ const createUser = async (userData) => {
 
 const authRegister = async (req, res) => {
   try {
-    const existingUser = await findUser(req.body);
+    const existingUser = await hashPassword.findUser(req.body);
 
     if (existingUser) {
       return res.status(400).send({error: 'User already exists'});
@@ -45,7 +45,33 @@ const authRegister = async (req, res) => {
     res.status(500).send({error: newErr});
   }
 };
+const authLogin = async (req,res, next) => {
+  try {
+    const existingUser = await hashPassword.findUser(req.body);
+
+    if (existingUser) {
+      // return res.status(200).send({error: 'User already exists'});
+      // console.log(existingUser, 'valid user');
+      hashPassword.decriptPassword(req.body.password,existingUser.password, (err,found) => {
+        if(err) throw err
+        if(found) console.log(found, 'migara')
+        if(!found) console.log('migara1')
+        next();
+      })
+    } else {
+      const savedUser = await createUser(req.body);
+      res.status(400).send({
+        message: 'Can\'t found valid user',
+        user: savedUser,
+      });
+    }
+  } catch (error) {
+    const newErr = handleErrors(error);
+    res.status(500).send({error: newErr});
+  }
+}
 
 module.exports = {
   authRegister,
+  authLogin,
 };

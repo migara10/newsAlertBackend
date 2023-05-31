@@ -1,7 +1,7 @@
 const express = require('express'); // import express
 const cors = require('cors');
 // const mongoose = require('mongoose'); // import mongoose
-const bodyParser = require('body-parser'); // import bodyParser
+const bodyParser = require('body-parser') // import bodyParser
 const app = express();
 const path = require('path');
 app.use(cors());
