@@ -1,5 +1,7 @@
 const authModel = require('../models/userModel');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+require('dotenv').config(); // config env
 
 const encryptPassword = async (password) => {
   try {
@@ -33,8 +35,23 @@ const decriptPassword = async (password, hash, callback) => {
   });
 }
 
+const verifyToken = (req, res, next) => {
+  if (req.headers.authorization && req.headers.authorization.startsWith('bearer')) {
+    const token = req.headers.authorization.split(' ')[1];
+    if (token == null) res.sendStatus(401)
+    jwt.verify(token, process.env.ACCESS_TOKEN, (err, user) => {
+      if (err) res.sendStatus(403);
+      req.user = user;
+      next();
+    })
+  } else {
+    res.sendStatus(401);
+  }
+}
+
 module.exports = {
   encryptPassword,
   findUser,
   decriptPassword,
+  verifyToken,
 };
