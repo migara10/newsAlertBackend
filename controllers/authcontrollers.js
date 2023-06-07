@@ -55,7 +55,7 @@ const authLogin = async (req, res, next) => {
     const existingUser = await hashPassword.findUser(req.body);
 
     if (existingUser) {
-      hashPassword.decriptPassword(req.body.password, existingUser.password, (err, found) => {
+      hashPassword.decryptPassword(req.body.password, existingUser.password, (err, found) => {
         if (err) throw err;
         if (found) {
           const userPayload = {user: existingUser.userName};
