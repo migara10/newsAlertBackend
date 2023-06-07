@@ -15,7 +15,7 @@ const encryptPassword = async (password) => {
 
 const findUser = async (userData) => {
   try {
-    const query = { userName: userData.userName };
+    const query = {userName: userData.userName};
     const data = await authModel.findOne(query);
     return data;
   } catch (err) {
@@ -23,35 +23,36 @@ const findUser = async (userData) => {
   }
 };
 
-const decriptPassword = async (password, hash, callback) => {
+const decryptPassword = async (password, hash, callback) => {
   bcrypt.compare(password, hash, (err, res) => {
-    if (err) throw err
+    if (err) throw err;
     if (res) {
-      callback(null, res)
+      callback(null, res);
     }
     if (!res) {
-      callback(null)
+      callback(null);
     }
   });
-}
+};
 
 const verifyToken = (req, res, next) => {
+  // eslint-disable-next-line max-len
   if (req.headers.authorization && req.headers.authorization.startsWith('bearer')) {
     const token = req.headers.authorization.split(' ')[1];
-    if (token == null) res.sendStatus(401)
+    if (token == null) res.sendStatus(401);
     jwt.verify(token, process.env.ACCESS_TOKEN, (err, user) => {
       if (err) res.sendStatus(403);
       req.user = user;
       next();
-    })
+    });
   } else {
     res.sendStatus(401);
   }
-}
+};
 
 module.exports = {
   encryptPassword,
   findUser,
-  decriptPassword,
+  decryptPassword: decryptPassword,
   verifyToken,
 };
