@@ -1,10 +1,9 @@
 /* eslint-disable max-len */
 const authModel = require('../models/userModel');
+const tokenModel = require('../models/tokenModel');
 const hashPassword = require('../middleware/hashPassword');
 const jwt = require('jsonwebtoken');
 require('dotenv').config(); // config env
-
-const refreshTokens = [];
 
 const handleErrors = (err) => {
   if (err.message.includes('userauths validation failed')) {
@@ -14,12 +13,6 @@ const handleErrors = (err) => {
     }
   };
 };
-
-/* const findUser = async (userData) => {
-  const query = {userName: userData.userName};
-  const data = await authModel.findOne(query);
-  return data;
-}; */
 
 const createUser = async (userData) => {
   try {
@@ -55,25 +48,29 @@ const authLogin = async (req, res, next) => {
     const existingUser = await hashPassword.findUser(req.body);
 
     if (existingUser) {
-      hashPassword.decryptPassword(req.body.password, existingUser.password, (err, found) => {
+      hashPassword.decryptPassword(req.body.password, existingUser.password, async (err, found) => {
         if (err) throw err;
         if (found) {
           const userPayload = {user: existingUser.userName};
           const accessToken = jwt.sign(userPayload, process.env.ACCESS_TOKEN, {expiresIn: '10s'});
           const refreshToken = jwt.sign(userPayload, process.env.REFRESH_TOKEN, {expiresIn: '120s'});
-          refreshTokens.push(refreshToken);
-          res.status(200).send({
-            message: 'Login successfully',
-            accessToken,
-            refreshToken,
-          });
+          try {
+            await tokenModel.create({refreshToken});
+            res.status(200).send({
+              message: 'Login successfully',
+              accessToken,
+              refreshToken,
+            });
+          } catch (error) {
+            console.error('Failed to save refresh token:', error);
+            res.status(500).send({error: 'Failed to save refresh token'});
+          }
         }
         if (!found) {
           res.status(400).send({
             message: 'Password Not Match!',
           });
         }
-        // next();
       });
     } else {
       await createUser(req.body);
@@ -87,16 +84,37 @@ const authLogin = async (req, res, next) => {
   }
 };
 
-const getToken = (req, res) => {
+const getToken = async (req, res) => {
   const refreshToken = req.body.refreshToken;
   if (refreshToken == null) res.sendStatus(401);
-  if (!refreshTokens.includes(refreshToken)) res.sendStatus(403);
-  jwt.verify(refreshToken, process.env.REFRESH_TOKEN, (err, user) => {
-    if (err) res.sendStatus(403);
-    const userPayload = {user: user.user};
-    const accessToken = jwt.sign(userPayload, process.env.ACCESS_TOKEN, {expiresIn: '10s'});
-    res.status(200).send({accessToken});
-  });
+  try {
+    const refreshTokenDoc = await tokenModel.findOne({refreshToken});
+    if (!refreshTokenDoc) {
+      return res.sendStatus(403);
+    }
+    jwt.verify(refreshToken, process.env.REFRESH_TOKEN, (err, user) => {
+      if (err) {
+        return res.sendStatus(403);
+      }
+      const userPayload = {user: user.user};
+      const accessToken = jwt.sign(userPayload, process.env.ACCESS_TOKEN, {expiresIn: '10s'});
+      res.status(200).send({accessToken});
+    });
+  } catch (error) {
+    console.error('Error retrieving refresh token:', error);
+    res.status(500).send({error: 'Failed to retrieve refresh token'});
+  }
+};
+
+const logout = async (req, res) => {
+  const refreshToken = req.body.refreshToken;
+  try {
+    await tokenModel.deleteOne({refreshToken});
+    res.status(204).send({message: 'Logged out successfully'});
+  } catch (error) {
+    console.error('Error deleting refresh token:', error);
+    res.status(500).send({error: 'Failed to delete refresh token'});
+  }
 };
 
 const test = (req, res) => {
@@ -109,4 +127,5 @@ module.exports = {
   authLogin,
   test,
   getToken,
+  logout,
 };
